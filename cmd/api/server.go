@@ -21,7 +21,7 @@ type applicationDependencies struct {
 	logger *slog.Logger
 }
 
-func mainserver() {
+func main() {
 	var settings serverConfig
 
 	flag.IntVar(&settings.port, "port", 4000, "Server port")
@@ -39,7 +39,7 @@ func mainserver() {
 	router.HandleFunc("/v1/healthcheck", appInstance.healthCheckHandler)
 
 	apiServer := &http.Server{
-		Addr:         fmt.Sprintf(":d", settings.port),
+		Addr:         fmt.Sprintf(":%d", settings.port),
 		Handler:      router,
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  5 * time.Second,
