@@ -10,8 +10,12 @@ import (
 // status code to send (default is 200)
 // actual data to encode in Json
 // a map of the headers to set for the response
-func (a *applicationDependencies) writeJson(w http.ResponseWriter, status int, data any, headers http.Header) error {
-	jsResponse, err := json.Marshal(data)
+
+// create and envelope type
+type envelope map[string]any
+
+func (a *applicationDependencies) writeJson(w http.ResponseWriter, status int, data envelope, headers http.Header) error {
+	jsResponse, err := json.MarshalIndent(data, "", "\t")
 	if err != nil {
 		return err
 	}
@@ -22,7 +26,10 @@ func (a *applicationDependencies) writeJson(w http.ResponseWriter, status int, d
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	w.Write(jsResponse)
+	_, err = w.Write(jsResponse)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

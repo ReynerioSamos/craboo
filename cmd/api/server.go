@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-const appVersion = "1.0.0"
+const appVersion = "5.0.0"
 
 type serverConfig struct {
 	port        int
