@@ -9,11 +9,7 @@ import (
 	"time"
 )
 
-<<<<<<< HEAD
-const appVersion = "4.0.0"
-=======
-const appVersion = "5.0.0"
->>>>>>> encode-json-v5
+const appVersion = "6.0.0"
 
 type serverConfig struct {
 	port        int

@@ -10,15 +10,11 @@ import (
 // status code to send (default is 200)
 // actual data to encode in Json
 // a map of the headers to set for the response
-<<<<<<< HEAD
-func (a *applicationDependencies) writeJson(w http.ResponseWriter, status int, data any, headers http.Header) error {
-=======
 
 // create and envelope type
 type envelope map[string]any
 
 func (a *applicationDependencies) writeJson(w http.ResponseWriter, status int, data envelope, headers http.Header) error {
->>>>>>> encode-json-v5
 	jsResponse, err := json.MarshalIndent(data, "", "\t")
 	if err != nil {
 		return err
@@ -34,9 +30,5 @@ func (a *applicationDependencies) writeJson(w http.ResponseWriter, status int, d
 	if err != nil {
 		return err
 	}
-<<<<<<< HEAD
-=======
-
->>>>>>> encode-json-v5
 	return nil
 }
