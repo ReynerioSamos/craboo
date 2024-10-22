@@ -1,11 +1,13 @@
 package main
 
 import (
-	"encoding/json"
+	_ "encoding/json"
 	"fmt"
 	"net/http"
+
 	// import the data package which contains the definition for Comment
 	// _[space] is used as placeholder to let compiler know to ignore this dependancy
+	_ "github.com/ReynerioSamos/craboo/internal/data"
 )
 
 func (a *applicationDependencies) createCommentHandler(w http.ResponseWriter, r *http.Request) {
@@ -15,12 +17,13 @@ func (a *applicationDependencies) createCommentHandler(w http.ResponseWriter, r 
 		Content string `json:"content"`
 		Author  string `json:"author"`
 	}
+
 	// perform the decoding
-	err := json.NewDecoder(r.Body).Decode(&incomingData)
+	err := a.readJson(w, r, &incomingData)
 	if err != nil {
-		a.errorResponseJSON(w, r, http.StatusBadRequest, err.Error())
+		a.badRequestResponse(w, r, err)
 		return
 	}
 	// for now display the result
-	fmt.Fprint(w, "+v\n", incomingData)
+	fmt.Fprintf(w, "%+v\n", incomingData)
 }

@@ -39,3 +39,9 @@ func (a *applicationDependencies) methodNotAllowedResponse(w http.ResponseWriter
 
 	a.errorResponseJSON(w, r, http.StatusMethodNotAllowed, message)
 }
+
+// 400 Bad Request Response
+// sends an error response if our client messes up with 400 (bad request)
+func (a *applicationDependencies) badRequestResponse(w http.ResponseWriter, r *http.Request, err error) {
+	a.errorResponseJSON(w, r, http.StatusBadRequest, err.Error())
+}
