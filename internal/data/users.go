@@ -4,35 +4,35 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"regexp"
 	"time"
 
 	"github.com/ReynerioSamos/craboo/internal/validator"
 )
 
-
 type User struct {
-	ID        	int64     `json:"id"`     	// unique value for each user
-	Email   	string    `json:"email` 	// the email of user
-	Fullname    string    `json:"fullname`  // the full name of user
-	CreatedAt 	time.Time `json:"-"`      	// database timestamp
+	ID        int64     `json:"id"`      // unique value for each user
+	Email     string    `json:"email`    // the email of user
+	Fullname  string    `json:"fullname` // the full name of user
+	CreatedAt time.Time `json:"-"`       // database timestamp
 }
 
-func Validateuser(v *validator.Validator, user *User) {
+func ValidateUser(v *validator.Validator, user *User) {
 	// check if email field is empty
-	v.Check(user.email != "", "email", "must be provided")
+	v.Check(user.Email != "", "email", "must be provided")
 
 	// check if fullname field is empty
-	v.Check(user.fullname != "", "fullname", "must be provided")
+	v.Check(user.Fullname != "", "fullname", "must be provided")
 
 	// check if the email field is too long
-	v.Check(len(user.email) <= 254, "email", "must not be more than 254 bytes long")
+	v.Check(len(user.Email) <= 254, "email", "must not be more than 254 bytes long")
 
 	// validation for email formatt using regex
 	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
-	v.Check(emailRegex.MatchString(user.email), "email", "must be a valid email address")
-	
+	v.Check(emailRegex.MatchString(user.Email), "email", "must be a valid email address")
+
 	//check if fullname field is too long
-	v.Check(len(user.fullname) <= 50, "fullname", "must not be more than 50 bytes long")
+	v.Check(len(user.Fullname) <= 50, "fullname", "must not be more than 50 bytes long")
 }
 
 // A UserModel expects a connection pool

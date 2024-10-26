@@ -13,8 +13,8 @@ import (
 func (a *applicationDependencies) createUserHandler(w http.ResponseWriter, r *http.Request) {
 	// create a struct to hold a User
 	var incomingData struct {
-		Email 		string `json:"email"`
-		Fullname 	string `json:"fullname"`
+		Email    string `json:"email"`
+		Fullname string `json:"fullname"`
 	}
 
 	// decoding
@@ -27,8 +27,8 @@ func (a *applicationDependencies) createUserHandler(w http.ResponseWriter, r *ht
 	// Copy the values from incomingData to a new User struct
 	// we will validate it using the Validators which expects a User
 	user := &data.User{
-		Email: incomingData.Email,
-		Fullname:  incomingData.Fullname,
+		Email:    incomingData.Email,
+		Fullname: incomingData.Fullname,
 	}
 	// Intialize Validator instance
 	v := validator.New()
@@ -73,7 +73,7 @@ func (a *applicationDependencies) displayUserHandler(w http.ResponseWriter, r *h
 	}
 
 	//Call Get() to retrieve the User with the specified id
-	User, err := a.userModel.Get(id)
+	user, err := a.userModel.Get(id)
 	if err != nil {
 		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
@@ -119,8 +119,8 @@ func (a *applicationDependencies) updateUserHandler(w http.ResponseWriter, r *ht
 	// leaving a field empty intentionally and the field not needing to be updated
 
 	var incomingData struct {
-		Email		*string `json:"email"`
-		Fullname  	*string `json:"fullname"`
+		Email    *string `json:"email"`
+		Fullname *string `json:"fullname"`
 	}
 
 	// decoding
