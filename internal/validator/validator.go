@@ -7,7 +7,7 @@ type Validator struct {
 }
 
 //Construct a new Validator and return a pointer to it
-// Al validation errors go into this one Validator instance
+// All validation errors go into this one Validator instance
 
 func New() *Validator {
 	return &Validator{
