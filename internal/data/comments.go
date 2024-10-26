@@ -116,3 +116,38 @@ func (c CommentModel) Update(comment *Comment) error {
 
 	return c.DB.QueryRowContext(ctx, query, args...).Scan(&comment.Version)
 }
+
+func (c CommentModel) Delete(id int64) error {
+	// check if the id is valid
+	if id < 1 {
+		return ErrRecordNotFound
+	}
+	// the SQL query to be executied against the database table
+	query := `
+		DELETE FROM comments
+		WHERE id = $1	
+		`
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	// ExecContext does not return any rows unlike QueryRowContext.
+	// It only returns information about the query execution
+	// such as how many rows were affected
+	result, err := c.DB.ExecContext(ctx, query, id)
+	if err != nil {
+		return err
+	}
+
+	// Were any rows deleted?
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	//Probably a wrong id was provided or the client is trying to delete an already deleted comment
+	if rowsAffected == 0 {
+		return ErrRecordNotFound
+	}
+
+	return nil
+}
