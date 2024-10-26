@@ -11,6 +11,7 @@ import (
 	"time"
 
 	// the '_' means that we will not direct use the pq package
+	"github.com/ReynerioSamos/craboo/internal/data"
 	_ "github.com/lib/pq"
 )
 
@@ -25,8 +26,9 @@ type serverConfig struct {
 }
 
 type applicationDependencies struct {
-	config serverConfig
-	logger *slog.Logger
+	config       serverConfig
+	logger       *slog.Logger
+	commentModel data.CommentModel
 }
 
 func main() {
@@ -52,8 +54,9 @@ func main() {
 	logger.Info("database connection pool established")
 
 	appInstance := &applicationDependencies{
-		config: settings,
-		logger: logger,
+		config:       settings,
+		logger:       logger,
+		commentModel: data.CommentModel{DB: db},
 	}
 
 	router := http.NewServeMux()
