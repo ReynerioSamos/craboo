@@ -200,7 +200,25 @@ func (a *applicationDependencies) deleteCommentHandler(w http.ResponseWriter, r 
 
 // create the list handler
 func (a *applicationDependencies) ListCommentsHandler(w http.ResponseWriter, r *http.Request) {
-	comments, err := a.commentModel.GetAll()
+	// create a struct to hold the query parameters
+	// later we will add fields for pagination and sorting (filters)
+	var queryParametersData struct {
+		Content string
+		Author  string
+	}
+	// get the query parameters from the URL
+	queryParameters := r.URL.Query()
+
+	// load the query parameters into our struct
+	queryParametersData.Content = a.getSingleQueryParameter(
+		queryParameters,
+		"content", "")
+
+	queryParametersData.Author = a.getSingleQueryParameter(
+		queryParameters,
+		"author", "")
+
+	comments, err := a.commentModel.GetAll(queryParametersData.Content, queryParametersData.Author)
 	if err != nil {
 		a.serverErrorResponse(w, r, err)
 		return

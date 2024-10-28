@@ -153,11 +153,18 @@ func (c CommentModel) Delete(id int64) error {
 }
 
 // Get all comments
-func (c CommentModel) GetAll() ([]*Comment, error) {
+func (c CommentModel) GetAll(content string, author string) ([]*Comment, error) {
 	// The SQL query to be executed against database table
+	// We will use Postgresql built in full text search feature
+	// which allows us to do natural language searches
+	// $? = '' allows for content and author to be optional
 	query := `
 		SELECT id, created_at, content, author, version
 		FROM comments
+		WHERE (to_tsvector('simple', content) @@
+				plainto_tsquery('simple', $1) OR $1 = '')
+		AND (to_tsvector('simple', author) @@
+				plainto_tsquery('simple', $2) OR $2 = '')
 		ORDER BY id
 		`
 
@@ -165,7 +172,7 @@ func (c CommentModel) GetAll() ([]*Comment, error) {
 	defer cancel()
 
 	// Query context returns multiple rows
-	rows, err := c.DB.QueryContext(ctx, query)
+	rows, err := c.DB.QueryContext(ctx, query, content, author)
 	if err != nil {
 		return nil, err
 	}
