@@ -30,6 +30,9 @@ func (a *applicationDependencies) routes() http.Handler {
 	router.HandlerFunc(http.MethodPatch, "/v1/users/:id", a.updateUserHandler)
 	router.HandlerFunc(http.MethodDelete, "/v1/users/:id", a.deleteUserHandler)
 
+	//route for List All comments handler
+	router.HandlerFunc(http.MethodGet, "/v1/comments", a.ListCommentsHandler)
+
 	//panic recover
 	return a.recoverPanic(router)
 }
