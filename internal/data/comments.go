@@ -153,7 +153,7 @@ func (c CommentModel) Delete(id int64) error {
 }
 
 // Get all comments
-func (c CommentModel) GetAll(content string, author string) ([]*Comment, error) {
+func (c CommentModel) GetAll(content string, author string, filters Filters) ([]*Comment, error) {
 	// The SQL query to be executed against database table
 	// We will use Postgresql built in full text search feature
 	// which allows us to do natural language searches
@@ -166,13 +166,14 @@ func (c CommentModel) GetAll(content string, author string) ([]*Comment, error) 
 		AND (to_tsvector('simple', author) @@
 				plainto_tsquery('simple', $2) OR $2 = '')
 		ORDER BY id
+		LIMIT $3 OFFSET $4
 		`
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	// Query context returns multiple rows
-	rows, err := c.DB.QueryContext(ctx, query, content, author)
+	rows, err := c.DB.QueryContext(ctx, query, content, author, filters.limit(), filters.offset())
 	if err != nil {
 		return nil, err
 	}
