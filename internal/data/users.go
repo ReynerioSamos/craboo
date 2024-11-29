@@ -11,10 +11,10 @@ import (
 )
 
 type User struct {
-	ID        int64     `json:"id"`      // unique value for each user
-	Email     string    `json:"email`    // the email of user
-	Fullname  string    `json:"fullname` // the full name of user
-	CreatedAt time.Time `json:"-"`       // database timestamp
+	ID        int64     `json:"id"`       // unique value for each user
+	Email     string    `json:"email"`    // the email of user
+	Fullname  string    `json:"fullname"` // the full name of user
+	CreatedAt time.Time `json:"-"`        // database timestamp
 }
 
 func ValidateUser(v *validator.Validator, user *User) {

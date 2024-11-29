@@ -15,11 +15,11 @@ import (
 // Make our JSON keys be displayed in all lowercase
 // "-" means don't show this field
 type Comment struct {
-	ID        int64     `json:"id"`     // unique value for each comment
-	Content   string    `json:"content` // the comment data
-	Author    string    `json:"author`  // the person who wrote the comment
-	CreatedAt time.Time `json:"-"`      // database timestamp
-	Version   int32     `json:"version` // incremented on each update
+	ID        int64     `json:"id"`      // unique value for each comment
+	Content   string    `json:"content"` // the comment data
+	Author    string    `json:"author"`  // the person who wrote the comment
+	CreatedAt time.Time `json:"-"`       // database timestamp
+	Version   int32     `json:"version"` // incremented on each update
 }
 
 func ValidateComment(v *validator.Validator, comment *Comment) {
